@@ -13,12 +13,17 @@
 #include "render.h"
 #include "input.h"
 #include "audio_hal.h"
+#include "launcher_handback.h"
 
 static const char *TAG = "CHILO";
 static const int64_t FRAME_US = 1000000 / 60;
 
 extern "C" void app_main(void)
 {
+    /* Before anything else: if we were chain-booted from the menu, make sure the
+     * next reset goes back to it rather than here. */
+    launcher_handback();
+
     ESP_LOGI(TAG, "CHILOPODA starting, free heap %lu", (unsigned long)esp_get_free_heap_size());
     display_init();
     display_set_backlight(DISPLAY_BRIGHTNESS_ACTIVE);
